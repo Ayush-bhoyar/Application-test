@@ -1,5 +1,14 @@
+@Library('jenkins-shared-library') _
+
 pipeline {
     agent { label 'ayush' }
+
+    environment {
+        IMAGE_NAME = 'ayushdocker2607/testapp:latest'
+        CONTAINER_NAME = 'testcontainer'
+        PORT = '3000'
+        DOCKER_CRED_ID = 'dockerhub-cred'
+    }
 
     stages {
         stage('Clone Repository') {
@@ -10,21 +19,16 @@ pipeline {
 
         stage('Build & Push Docker Image') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh 'docker login -u "$DOCKER_USER" -p "$DOCKER_PASS"'
-                }
-                sh 'docker build -t ayushdocker2607/testapp:new .'
-                sh 'docker push ayushdocker2607/testapp:new'
+                buildAndPushDocker(env.IMAGE_NAME, env.DOCKER_CRED_ID)
             }
         }
 
         stage('Deploy from Docker Hub') {
             steps {
-                sh 'docker stop testcontainer || true'
-                sh 'docker rm testcontainer || true'
-                sh 'docker pull ayushdocker2607/testapp:new'
-                sh 'docker run -d -p 3000:3000 --name testcontainer ayushdocker2607/testapp:new'
+                deployDockerContainer(env.IMAGE_NAME, env.CONTAINER_NAME, env.PORT)
             }
         }
     }
 }
+
+                
