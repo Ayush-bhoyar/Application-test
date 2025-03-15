@@ -13,8 +13,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh 'docker login -u "$DOCKER_USER" -p "$DOCKER_PASS"'
                 }
-                sh 'docker build -t ayushdocker2607/testapp:latest .'
-                sh 'docker push ayushdocker2607/testapp:latest'
+                sh 'docker build -t ayushdocker2607/testapp:new .'
+                sh 'docker push ayushdocker2607/testapp:new'
             }
         }
 
@@ -22,8 +22,8 @@ pipeline {
             steps {
                 sh 'docker stop testcontainer || true'
                 sh 'docker rm testcontainer || true'
-                sh 'docker pull ayushdocker2607/testapp:latest'
-                sh 'docker run -d -p 3000:3000 --name testcontainer ayushdocker2607/testapp:latest'
+                sh 'docker pull ayushdocker2607/testapp:new'
+                sh 'docker run -d -p 3000:3000 --name testcontainer ayushdocker2607/testapp:new'
             }
         }
     }
