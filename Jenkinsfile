@@ -1,31 +1,13 @@
-@Library('jenkins-shared-library@main') _
+@Library('jenkins-shared-library') _
 
 pipeline {
-    agent { label 'ayush' }
-
-    environment {
-        IMAGE_NAME = 'ayushdocker2607/testapp:latest'
-        CONTAINER_NAME = 'testcontainer'
-        PORT = '3000'
-        DOCKER_CRED_ID = 'dockerhub-cred'
-    }
-
+    agent any
     stages {
-        stage('Clone Repository') {
+        stage('Test Shared Library') {
             steps {
-                git branch: 'main', url: 'https://github.com/Ayush-bhoyar/Application-test.git'
-            }
-        }
-
-        stage('Build & Push Docker Image') {
-            steps {
-                buildAndPushDocker(env.IMAGE_NAME, env.DOCKER_CRED_ID)
-            }
-        }
-
-        stage('Deploy from Docker Hub') {
-            steps {
-                deployDockerContainer(env.IMAGE_NAME, env.CONTAINER_NAME, env.PORT)
+                script {
+                    helloWorld()
+                }
             }
         }
     }
