@@ -4,9 +4,9 @@ pipeline {
     agent { label 'ayush' }
 
     environment {
-        IMAGE_NAME = 'ayushdocker2607/testapp:v1'
+        IMAGE_NAME = 'ayushdocker2607/testapp:v2'
         CONTAINER_NAME = 'testcontainer-1'
-        PORT = '3000'
+        PORT = '3001'
         DOCKER_CRED_ID = 'dockerhub-cred'
     }
 
